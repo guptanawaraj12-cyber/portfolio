@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    const introParams = new URLSearchParams(location.search);
+    const introDebug = introParams.get("intro") === "1";
+    if ((introDebug || !localStorage.getItem("portfolio-intro-seen")) &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.__portfolioIntroStartedAt = performance.now();
+      document.documentElement.dataset.introGate = "show";
+      localStorage.setItem("portfolio-intro-seen", "true");
+      window.__portfolioIntroDuration = introParams.get("introSlow") === "1" ? 6000 : 700;
+      let introDone = false;
+      const finishIntro = () => {
+        if (introDone) return;
+        introDone = true;
+        window.__portfolioIntroDone = true;
+        const gate = document.querySelector(".loading-intro");
+        const count = gate?.querySelector(".effects-intro-count");
+        const bar = gate?.querySelector(".effects-intro-bar");
+        if (count) count.textContent = "100%";
+        if (bar) bar.style.transform = "scaleX(1)";
+        document.documentElement.removeAttribute("data-intro-gate");
+        document.dispatchEvent(new Event("portfolio:introfinish"));
+        gate?.classList.add("is-exiting");
+        window.setTimeout(() => gate?.remove(), 950);
+        document.removeEventListener("pointerdown", finishIntro, true);
+        document.removeEventListener("click", finishIntro, true);
+        document.removeEventListener("keydown", handleIntroKey, true);
+      };
+      const handleIntroKey = (event) => {
+        if (event.key === "Escape") finishIntro();
+      };
+      window.__portfolioIntroFinish = finishIntro;
+      document.addEventListener("pointerdown", finishIntro, true);
+      document.addEventListener("click", finishIntro, true);
+      document.addEventListener("keydown", handleIntroKey, true);
+    }
+  </script>
+  <meta name="description" content="Contact Nawaraj Gupta by email, phone, or LinkedIn.">
+  <link rel="canonical" href="https://nawarajgupta.com.np/contact/">
+  <meta property="og:url" content="https://nawarajgupta.com.np/contact/">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>Contact — Nawaraj Gupta</title>
+  <script>
+    (() => {
+      const localFile = location.protocol === "file:";
+      const nestedFile = localFile && /\/(?:about|projects|resume|contact)\/index\.html$/i.test(location.pathname);
+      const rootPath = localFile ? (nestedFile ? "../" : "./") : "/";
+      const asset = (path) => `${rootPath}${path}`;
+      document.write(`<link rel="icon" href="${asset("assets/favicon.svg")}" type="image/svg+xml">`);
+      document.write(`<link rel="stylesheet" href="${asset("css/style.css")}">`);
+      document.write(`<link rel="stylesheet" href="${asset("css/effects.css")}">`);
+      document.write(`<script src="${asset("js/local-preview.js")}"><\/script>`);
+      const photoPage = localFile
+        ? /\/(?:about\/)?index\.html$/i.test(location.pathname)
+        : location.pathname === "/" || location.pathname === "/about/";
+      if (photoPage) document.write(`<script src="${asset("js/photo-data.js")}" defer><\/script>`);
+      document.write(`<script src="${asset("js/main.js")}" defer><\/script>`);
+      document.write(`<script src="${asset("js/effects.js")}" defer><\/script>`);
+    })();
+  </script>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="loading-intro effects-intro" role="group" aria-label="Introduction">
+    <span class="loading-name">Nawaraj Gupta</span>
+    <span class="logo-dots" aria-hidden="true"><i></i><i></i></span>
+    <div class="effects-intro-progress" aria-hidden="true">
+      <span class="effects-intro-count">0%</span>
+      <span class="effects-intro-track"><span class="effects-intro-bar"></span></span>
+    </div>
+    <button class="effects-intro-skip" type="button" aria-label="Skip introduction">Skip intro</button>
+  </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><a class="wordmark nav-item" href="/" aria-label="Nawaraj Gupta, home"><span>Nawaraj Gupta</span><span class="logo-dots" aria-hidden="true"><i></i><i></i></span></a><button class="theme-toggle nav-item" type="button" aria-label="Switch to light theme" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg><span>Theme</span></button></header>
+  <main id="main" class="page-wrap inner-page contact-page">
+    <section class="page-intro reveal" data-scroll-theme="dark"><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>05 / Contact</p><h1>Let’s start<br><span class="accent-text">a conversation.</span></h1><p class="intro-lead">Have a question, an idea, or just want to say hello? I’d be glad to hear from you.</p></section>
+    <section class="section contact-grid" data-scroll-theme="light">
+      <div class="contact-details reveal"><p class="eyebrow">Find me here</p><h2>Keep it simple.<br>Say hello.</h2><a class="contact-link" href="mailto:guptanawaraj12@gmail.com"><span>Email</span><strong>guptanawaraj12@gmail.com</strong><span aria-hidden="true">↗</span></a><a class="contact-link" href="tel:+9779867229032"><span>Phone</span><strong>+977 9867229032</strong><span aria-hidden="true">↗</span></a><div class="contact-link" id="linkedin"><span>LinkedIn</span><strong>Nawaraj Gupta</strong><span class="linkedin-note">Profile link to be added</span></div><p class="eyebrow contact-location"><span class="status-dot" aria-hidden="true"></span>Based in Parasi, Nepal</p></div>
+      <div class="contact-form-stack reveal">
+        <section class="contact-chat" id="contact-chat" data-contact-chat aria-labelledby="contact-chat-title" hidden>
+          <div class="contact-chat-heading">
+            <p class="eyebrow">A guided hello</p>
+            <h2 id="contact-chat-title">What brings you by?</h2>
+          </div>
+          <div class="contact-chat-log" data-contact-chat-log role="log" aria-live="polite" aria-relevant="additions"></div>
+          <div class="contact-chat-suggestions" data-chat-suggestions>
+            <button type="button" class="chat-suggestion" data-chat-suggestion>I'd like to hire you</button>
+            <button type="button" class="chat-suggestion" data-chat-suggestion>Collaborate</button>
+            <button type="button" class="chat-suggestion" data-chat-suggestion>Just saying hi</button>
+          </div>
+          <p class="chat-typing" data-chat-typing aria-hidden="true" hidden>One moment<span class="chat-typing-dots"><i></i><i></i><i></i></span></p>
+          <div class="contact-chat-entry" data-chat-entry hidden>
+            <label for="guided-answer" data-chat-input-label>Your name</label>
+            <input id="guided-answer" data-chat-input type="text" autocomplete="name" minlength="2">
+            <textarea id="guided-message" data-chat-message-input rows="3" hidden></textarea>
+            <button type="button" class="chat-action" data-chat-next>Continue <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="contact-chat-summary" data-chat-summary hidden></div>
+          <button type="button" class="chat-action chat-submit" data-chat-submit hidden>Prepare email <span aria-hidden="true">↗</span></button>
+          <a class="text-link chat-form-link" href="#contact-name">Or use the plain form below</a>
+        </section>
+        <form class="contact-form" data-contact-form action="https://formspree.io/f/xkjrqoky" method="post">
+          <p class="eyebrow">Send a note</p>
+          <label for="contact-name">Your name</label>
+          <input id="contact-name" name="name" type="text" autocomplete="name" placeholder="How should I address you?" required minlength="2">
+          <label for="contact-email">Email address</label>
+          <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <label for="contact-message">Your message</label>
+          <textarea id="contact-message" name="message" rows="5" placeholder="What’s on your mind?" required minlength="10"></textarea>
+          <div class="form-trap" aria-hidden="true">
+            <input id="contact-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          </div>
+          <input name="_subject" type="hidden" value="New message from my portfolio">
+          <p class="form-hint">Your message is sent through Formspree and delivered to my email. I only use it to reply to you.</p>
+          <button class="button button-primary" type="submit">Send message <span aria-hidden="true">↗</span></button>
+          <div class="form-feedback" data-form-feedback aria-live="polite" role="status"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer page-wrap"><a class="footer-brand" href="/">Nawaraj Gupta<span class="logo-dots" aria-hidden="true"><i></i><i></i></span></a><p>Learning, growing, and making things.</p><div class="footer-bottom"><span>© <span data-year>2026</span> Nawaraj Gupta</span><div class="footer-links"><a href="mailto:guptanawaraj12@gmail.com">Email</a><a href="tel:+9779867229032">Phone</a><a href="#linkedin">LinkedIn</a></div><a class="back-top" href="#main">Back to top ↑</a></div></footer>
+  <nav class="dock" aria-label="Main navigation"><a href="/"><span class="dock-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="/about/"><span class="dock-icon" aria-hidden="true">◌</span><span>About</span></a><a href="/projects/"><span class="dock-icon" aria-hidden="true">▧</span><span>Projects</span></a><a href="/resume/"><span class="dock-icon" aria-hidden="true">▤</span><span>Resume</span></a><a href="/contact/" aria-current="page"><span class="dock-icon" aria-hidden="true">↗</span><span>Contact</span></a></nav>
+</body>
+</html>

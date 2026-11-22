@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    const introParams = new URLSearchParams(location.search);
+    const introDebug = introParams.get("intro") === "1";
+    if ((introDebug || !localStorage.getItem("portfolio-intro-seen")) &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.__portfolioIntroStartedAt = performance.now();
+      document.documentElement.dataset.introGate = "show";
+      localStorage.setItem("portfolio-intro-seen", "true");
+      window.__portfolioIntroDuration = introParams.get("introSlow") === "1" ? 6000 : 700;
+      let introDone = false;
+      const finishIntro = () => {
+        if (introDone) return;
+        introDone = true;
+        window.__portfolioIntroDone = true;
+        const gate = document.querySelector(".loading-intro");
+        const count = gate?.querySelector(".effects-intro-count");
+        const bar = gate?.querySelector(".effects-intro-bar");
+        if (count) count.textContent = "100%";
+        if (bar) bar.style.transform = "scaleX(1)";
+        document.documentElement.removeAttribute("data-intro-gate");
+        document.dispatchEvent(new Event("portfolio:introfinish"));
+        gate?.classList.add("is-exiting");
+        window.setTimeout(() => gate?.remove(), 950);
+        document.removeEventListener("pointerdown", finishIntro, true);
+        document.removeEventListener("click", finishIntro, true);
+        document.removeEventListener("keydown", handleIntroKey, true);
+      };
+      const handleIntroKey = (event) => {
+        if (event.key === "Escape") finishIntro();
+      };
+      window.__portfolioIntroFinish = finishIntro;
+      document.addEventListener("pointerdown", finishIntro, true);
+      document.addEventListener("click", finishIntro, true);
+      document.addEventListener("keydown", handleIntroKey, true);
+    }
+  </script>
+  <meta name="description" content="Explore projects and ideas in progress by Nawaraj Gupta, a student learning to build useful things.">
+  <link rel="canonical" href="https://nawarajgupta.com.np/projects/">
+  <meta property="og:url" content="https://nawarajgupta.com.np/projects/">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>Projects — Nawaraj Gupta</title>
+  <script>
+    (() => {
+      const localFile = location.protocol === "file:";
+      const nestedFile = localFile && /\/(?:about|projects|resume|contact)\/index\.html$/i.test(location.pathname);
+      const rootPath = localFile ? (nestedFile ? "../" : "./") : "/";
+      const asset = (path) => `${rootPath}${path}`;
+      document.write(`<link rel="icon" href="${asset("assets/favicon.svg")}" type="image/svg+xml">`);
+      document.write(`<link rel="stylesheet" href="${asset("css/style.css")}">`);
+      document.write(`<link rel="stylesheet" href="${asset("css/effects.css")}">`);
+      document.write(`<script src="${asset("js/local-preview.js")}"><\/script>`);
+      const photoPage = localFile
+        ? /\/(?:about\/)?index\.html$/i.test(location.pathname)
+        : location.pathname === "/" || location.pathname === "/about/";
+      if (photoPage) document.write(`<script src="${asset("js/photo-data.js")}" defer><\/script>`);
+      document.write(`<script src="${asset("js/main.js")}" defer><\/script>`);
+      document.write(`<script src="${asset("js/effects.js")}" defer><\/script>`);
+    })();
+  </script>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="loading-intro effects-intro" role="group" aria-label="Introduction">
+    <span class="loading-name">Nawaraj Gupta</span>
+    <span class="logo-dots" aria-hidden="true"><i></i><i></i></span>
+    <div class="effects-intro-progress" aria-hidden="true">
+      <span class="effects-intro-count">0%</span>
+      <span class="effects-intro-track"><span class="effects-intro-bar"></span></span>
+    </div>
+    <button class="effects-intro-skip" type="button" aria-label="Skip introduction">Skip intro</button>
+  </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><a class="wordmark nav-item" href="/" aria-label="Nawaraj Gupta, home"><span>Nawaraj Gupta</span><span class="logo-dots" aria-hidden="true"><i></i><i></i></span></a><button class="theme-toggle nav-item" type="button" aria-label="Switch to light theme" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l-1.42-1.42m11.3-11.3 1.42-1.42"></path></svg><span>Theme</span></button></header>
+  <main id="main" class="page-wrap inner-page">
+    <section class="page-intro reveal" id="project-intro" data-scroll-theme="dark" data-rail-label="Intro"><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>03 / Projects</p><h1>Ideas, becoming<br><span class="accent-text">something.</span></h1><p class="intro-lead">A small collection of things I’m making and learning from. Some are underway; the rest will arrive when they’re ready.</p></section>
+    <section class="section project-page-grid" id="project-list" aria-label="Project list" data-scroll-theme="light" data-rail-label="Projects">
+      <article class="project-card project-card-static reveal" id="plann">
+        <div class="project-art project-art-plann" aria-label="Abstract planning interface illustration"><span class="mini-window"><i></i><i></i><i></i><b>today</b><em></em><em></em><em></em></span><span class="project-art-note">make room<br>for what matters</span></div>
+        <div class="card-meta"><span>In progress</span><span>Personal project</span></div><h2>Plann</h2><p>A planning idea taking shape, one thoughtful step at a time. I’m working through the concept before deciding what it should become.</p><div class="pill-row"><span class="skill-pill">Planning</span><span class="skill-pill">In the works</span></div><span class="project-footnote">More to share as it grows <span aria-hidden="true">↗</span></span>
+      </article>
+      <article class="project-card project-card-static reveal" id="portfolio">
+        <div class="project-art project-art-portfolio" aria-label="Abstract portfolio cover illustration"><span class="portfolio-shape">NG<span>·</span></span><span class="portfolio-caption">A corner of<br>the internet</span><span class="portfolio-line"></span></div>
+        <div class="card-meta"><span>Live</span><span>Personal project</span></div><h2>Personal portfolio</h2><p>This website: a simple home for my story, education, and ideas in progress.</p><div class="pill-row"><span class="skill-pill">HTML</span><span class="skill-pill">CSS</span><span class="skill-pill">JavaScript</span></div><a class="project-footnote" href="/contact/">Have feedback? Let’s talk <span aria-hidden="true">↗</span></a>
+      </article>
+    </section>
+    <section class="closing-cta reveal" id="project-end" data-scroll-theme="dark" data-rail-label="Next"><p class="eyebrow">More ahead</p><h2>Good things take<br>curiosity and time.</h2><a class="button button-primary" href="/contact/">Get in touch <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer page-wrap"><a class="footer-brand" href="/">Nawaraj Gupta<span class="logo-dots" aria-hidden="true"><i></i><i></i></span></a><p>Learning, growing, and making things.</p><div class="footer-bottom"><span>© <span data-year>2026</span> Nawaraj Gupta</span><div class="footer-links"><a href="mailto:guptanawaraj12@gmail.com">Email</a><a href="tel:+9779867229032">Phone</a><a href="/contact/#linkedin">LinkedIn</a></div><a class="back-top" href="#main">Back to top ↑</a></div></footer>
+  <nav class="dock" aria-label="Main navigation"><a href="/"><span class="dock-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="/about/"><span class="dock-icon" aria-hidden="true">◌</span><span>About</span></a><a href="/projects/" aria-current="page"><span class="dock-icon" aria-hidden="true">▧</span><span>Projects</span></a><a href="/resume/"><span class="dock-icon" aria-hidden="true">▤</span><span>Resume</span></a><a href="/contact/"><span class="dock-icon" aria-hidden="true">↗</span><span>Contact</span></a></nav>
+</body>
+</html>
